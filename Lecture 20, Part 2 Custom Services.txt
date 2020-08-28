@@ -1,0 +1,152 @@
+[SOUND]
+Okay, so I'm back in my editor and I'm located in lecture 20 in
+the full-stack-course5/examples folder. And here we have a very
+simple Shopping List App, and what this app will do is will let
+us add things to our shopping list. But, what we did here is,
+we broke it up into two controllers. In fact, let me go ahead and
+close the file browser so you can see this a little bit better. So there's two controllers here,
+the controller one is called ShoppingListAddController, and you can see
+that we're using the controller s syntax. So anywhere within this
+controller right here, we're going to be referring to
+our controller as item adder. So this is going to let us add
+items to our shopping list. And you could see that we have
+a couple of input text boxes here and each of them is bound to a property that
+is sitting directly on the controller, just as they should in
+a controller as syntax. The one is called item name and
+the other one is called Item quantity. We also have a button here with
+an ng-click bound to item adder that add item. What that's obviously going to do is, it's
+going to read this particular properties and create an item,
+then place it into some data structure, like an array, to keep a list of
+all items in our shopping list. The second control we have here is,
+this one right here and this one is nicknamed as showList,
+that's its label. And all we're doing here is,
+let's go up a little bit, all we're doing here is we're doing
+ng-repeat, and there's apparently, inside of that controller,
+a property called items. And it's a collection, probably an array. And we're looping over those items and
+every time through the loop we're saying I want to list the item.quantity
+of item.name. And we're doing this inside of an ordered
+list, so it's going to call 1, 2, 3, and so forth. Of course,
+these are two separate controllers, so we can't exactly share data
+directly between them. What we can do is have a service
+that shares data between them and also has some methods that helps us keep
+track of the items in our shopping list. Let's go ahead and go to the app.js and
+see how we did that. So the first thing you see is we
+declared both of these controllers, this is something you've seen
+before there's nothing new here. And then, what we've done here
+is we declared a service. The service is called shopping
+list service, and just for convenience, the function value that is
+representing that shopping list service is also named ShoppingListService. Let's go ahead and jump and
+take a look at that shopping list service. Well, it's a regular function and since it's going to be used as a function
+constructor, we know that we can attach things to the this variable in order
+to expose it to the outside world. So here we're doing a regular pattern that
+we've learned in our previous course, was just basically renaming this variable
+to something that's more readable and will not have issues with inner functions. So now, everything from now on that's
+called service, is really just this. And you can see here,
+we're declaring in the rate of items, and we're not exposing it through the service. So it's going to be internal
+through our shopping list service. And we have a couple of methods. One is, add item, and add item
+takes an item name and a quantity, all it does is, it creates an object item
+with a name and quantity properties. And then pushes that item,
+that object onto our items array. And the last method here
+is called get items and all it does is actually expose our
+internal items array to the outside. So if you call get items, you're
+actually going to get our items array. So, if we ever decided to represent
+the items, not as an array, but something else, or
+maybe you want something more complex. This get items method, helps us hide that
+data structure from the outside world, meaning outside of our
+shopping list service. So let's take a look at
+our two controllers. The first one we called the shopping
+list ed controller, that's the guy whose going to be responsible for
+adding things to the shopping list. As you can see, we're ejecting
+it with a shopping list service, and obviously repeating it not only
+in the dollar sign ejector array ,but Inside of the argument list of
+the actual function that represents the shopping list add controller. And again, the same pattern, itemAdder,
+that's our label from the HTML template. And itemAdder is going to initialize
+the item name to be an empty string and itemQuanity also to be an empty string. And here we only have one
+method which is add item. And what that that's going to do is
+going to use our ShoppingListService and call our ShoppingListServices add item, which is going to pass it to itemName
+as bound to our HTML input field, and the item quantity, which is also
+bound to the HTML input field. Now when we look at the controller that is
+responsible for displaying the shopping list, we see here that we have
+a very similar construct here, we also are injecting this
+shopping list service. And as you remember, it's the same
+instance as the shopping list servers, that AngularJS created for us in this
+particular code right here, service, when AngularJS creates that, it only creates
+one of them and every time it injects it. It injects the exact same instance into
+wherever you try to inject it to, and in this case, a couple of controllers. So our shopping list service is injected
+into the ShoppingListShowController, and again, the same pattern, showlist equals this because this is
+a controller as syntax sow we're attaching all the properties directly to
+the instance of the controller. That is automatically attached
+to the dollar sign scope for us by Angular the controller syntax. So shopping list here, all it's doing
+is exposing the items list, and the way we get the items is getting
+from the shopping list service.getitems. So whatever that was placed into the items
+array that is internal to the shopping list by of the other controller using
+that same shopping list service instance, is going to be returned
+right here by get items, because the instance of the shopping
+list is one and the same. Let's go ahead and save that, and go to our browser, since I have
+the browser sync running already. And I could start entering my item names. Let's see, cookies, very important,
+let's get like three bags of that. Click Add Item to Shopping List, and you could see it showing up
+immediately in other part of the page. And this part of the page is
+something that the second controller, the show controller is responsible for
+is good at something else good. Like chips, let's give 4 bags of that,
+and add that to the list. You can see, again, it's immediately
+showing it up since we've bound the items collection that is being
+output through the, and you repeat. We've bound it to the shopping list items
+that is internal to the shopping list. And for good measure,
+let's go ahead and do sugary drinks, let's get 10 of those, 10 bottles,
+and add to the shopping list. Here we go, so we're good to go here. The only minor problem here
+is we don't have any way of removing anything from the shopping list. So let's go back to our code editor, and code up a remove method on the service,
+and then propagate it throughout the components that us that
+shopping list service. Let's go ahead and add method right here. And we'll say service.removeItem and
+it's a function. And what we're going to do
+is we're going to ask for an item index from whomever is using it,
+because we have a list, after all, so it should have whatever the item
+index that you want to remove. And we'll say items.splice
+Splice as special array method. And it takes an index that
+you want to removed from and how many you want to removed from. Since we only removed one. We going to removed just one. Okay, so that's the removed Or
+not remote, remove. Remove item method. Okay. So we've got the remove item method. Next let's go to our show controller,
+or the shopping list show controller, and code up a method that we'll
+be able to use in the template. We'll say show list. That removeItem = function. Don't need the name. And we'll also ask the HTML template
+to pass us along an index on which the user clicked. And we'll see how we're going to do that. So we'll say itemIdex. And here, since we're using, or re-using the same instance
+of the ShoppingListService, we could say ShoppingListService,
+right there, .removeItem and we'll just pass along the item Index and
+I misspelled here. It's Index. Okay, so we're good to go. Semicolon, right there. Okay.
+Let's go to the index.html our template and actually make sure that it
+invokes our remove item method. The way we'll do that is we'll scroll
+down to Each item here, this is where each item is being displayed, and right
+next to the item, we'll create a button that will have ng-click bound to,
+and our showList. Is the label. So we have to use the showList.removeItem. And as you remember from our
+discussion of ng-repeat, it exposes the index through the loop
+using the $index property that is available to the body of the element
+on which the ng-repeat is declared. So that's exactly what we're going to do. going to say remote again and so
+remove that remote, remove Item, and index is going to be $index
+is what we are passing it along. So it should point to exactly the item,
+the index of the item in our array. So let's go ahead and save that, and one more thing is forgot
+to put the label in here. We'll say remove. Item. So that's going to be
+the label of our button. Let's go back to our browser. And you could see now when we
+add stuff like cookies, and three bags of it, we'll click Add,
+you see the Remove button now shows up. Let's go ahead and
+add something else, like chips again. That's four bags again. We'll add that to the list. And let's go ahead and add what we're really going to need after
+all that type of food is Pepto Bismol. And we'll get two bottle of that. And we'll add that to the list. Okay, so
+now we have three items in the list. And we have the remove buttons, and if we click the remove button
+the four bags of chips will go away. Let's take a look, and
+sure enough it goes away. And we can actually move every
+single one of them, one by one. So the item list is now empty. So let's review. Controllers are not supposed
+to handle business logic. They're also not supposed
+to be used to share codes. So if you have common code
+between different controllers, it's not a good idea to try
+to reuse the controllers. Rather, you should Factor
+that code into a service and then share the service
+within the Controllers. Controllers are also not
+supposed to be used to share data across different components. Now custom services instantiated with
+a .service method are Singletons Which means, there's only one instance
+of the object that ever exists, which means you could share data
+between different controllers or other components using that service
+because again only one exists so therefore it's going to hold the same data Across
+all your components of your application. Also, services instantiated with
+a .service method are lazily instantiated, which means they're only created if
+something actually depends on them. If nothing depends on them. They're simply not instantiated at all. Ans last but not least, the .service
+method that you supply the function to as your custom service, treats that
+function as a function constructor and we spoken before, that what it means
+is that the angular JS internally will actually new up your function using in
+new keyword Which has ramifications for what this keyword means inside
+of your service function.
